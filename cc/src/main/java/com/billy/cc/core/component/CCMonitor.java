@@ -5,8 +5,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import java.lang.ref.WeakReference;
 import java.util.Collection;
@@ -14,10 +14,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * CC监控系统
- * 每个CC对象有自己的超时时间点，
- * 维护一个待监控的CC列表，当列表不为空时，启动一个线程进行监控
- * @author billy.qi
+ * CC鐩戞帶绯荤粺
+ * 姣忎釜CC瀵硅薄鏈夎嚜宸辩殑瓒呮椂鏃堕棿鐐癸紝
+ * 缁存姢涓€涓緟鐩戞帶鐨凜C鍒楄〃锛屽綋鍒楄〃涓嶄负绌烘椂锛屽惎鍔ㄤ竴涓嚎绋嬭繘琛岀洃鎺? * @author billy.qi
  */
 class CCMonitor {
 
@@ -35,7 +34,7 @@ class CCMonitor {
             if (timeoutAt > 0) {
                 if (minTimeoutAt > timeoutAt) {
                     minTimeoutAt = timeoutAt;
-                    //如果最小timeout时间有变化，且监控线程在wait，则唤醒监控线程
+                    //濡傛灉鏈€灏弔imeout鏃堕棿鏈夊彉鍖栵紝涓旂洃鎺х嚎绋嬪湪wait锛屽垯鍞ら啋鐩戞帶绾跨▼
                     synchronized (LOCK) {
                         LOCK.notifyAll();
                     }
@@ -60,7 +59,7 @@ class CCMonitor {
     }
 
     /**
-     * CC超时监控线程
+     * CC瓒呮椂鐩戞帶绾跨▼
      */
     private static class TimeoutMonitorThread extends Thread {
         @Override

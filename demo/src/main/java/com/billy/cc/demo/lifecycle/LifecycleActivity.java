@@ -1,11 +1,11 @@
-package com.billy.cc.demo.lifecycle;
+﻿package com.billy.cc.demo.lifecycle;
 
 import android.os.Bundle;
-import android.support.annotation.IdRes;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.IdRes;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,7 +17,7 @@ import com.billy.cc.demo.JsonFormat;
 import com.billy.cc.demo.R;
 
 /**
- * 测试activity.onDestroy和fragment.onDestroy时，CC自动cancel
+ * 娴嬭瘯activity.onDestroy鍜宖ragment.onDestroy鏃讹紝CC鑷姩cancel
  * @author billy.qi
  * @since 17/12/9 11:06
  */
@@ -119,3 +119,4 @@ public class LifecycleActivity extends AppCompatActivity implements View.OnClick
         }
     };
 }
+

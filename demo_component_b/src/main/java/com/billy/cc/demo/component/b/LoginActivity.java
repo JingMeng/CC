@@ -1,9 +1,9 @@
-package com.billy.cc.demo.component.b;
+﻿package com.billy.cc.demo.component.b;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.SparseIntArray;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 模拟登录页面
+ * 妯℃嫙鐧诲綍椤甸潰
  * @author billy.qi
  * @since 17/11/23 13:01
  */
@@ -67,14 +67,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //判断是否为CC调用打开本页面
-        if (callId != null) {
+        //鍒ゆ柇鏄惁涓篊C璋冪敤鎵撳紑鏈〉闈?        if (callId != null) {
             CCResult result;
             if (Global.loginUser == null) {
                 result = CCResult.error("login canceled");
             } else {
-                //演示跨app传递自定义类型及各种集合类型
-                List<User> list = new ArrayList<>();
+                //婕旂ず璺╝pp浼犻€掕嚜瀹氫箟绫诲瀷鍙婂悇绉嶉泦鍚堢被鍨?                List<User> list = new ArrayList<>();
                 list.add(new User(1, "aaa"));
                 list.add(new User(3, "ccc"));
                 SparseArray<User> userSparseArray = new SparseArray<>();
@@ -100,8 +98,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         .addData("map", map) // Map
                 ;
             }
-            //为确保不管登录成功与否都会调用CC.sendCCResult，在onDestroy方法中调用
-            CC.sendCCResult(callId, result);
+            //涓虹‘淇濅笉绠＄櫥褰曟垚鍔熶笌鍚﹂兘浼氳皟鐢–C.sendCCResult锛屽湪onDestroy鏂规硶涓皟鐢?            CC.sendCCResult(callId, result);
         }
     }
 }
+

@@ -5,7 +5,7 @@ android {
     compileSdkVersion rootProject.compileVersion
 
     defaultConfig {
-        minSdkVersion 9 // support v7 minSdkVersion is 9
+        minSdk 14 // support v7 minSdkVersion is 9
         targetSdkVersion rootProject.compileVersion
         versionCode 1
         versionName "1.0"
@@ -17,6 +17,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    
     }
 
 }
@@ -26,3 +27,5 @@ dependencies {
     implementation "com.android.support:appcompat-v7:${rootProject.supportVersion}"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 }
+
+

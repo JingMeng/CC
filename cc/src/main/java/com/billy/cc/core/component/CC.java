@@ -7,8 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Looper;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -25,7 +25,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 组件调用
+ * 缁勪欢璋冪敤
  * CC = Component Caller
  * @author billy.qi
  */
@@ -35,20 +35,17 @@ public class CC {
     private static final String TAG = "ComponentCaller";
     private static final String VERBOSE_TAG = "ComponentCaller_VERBOSE";
     /**
-     * 默认超时时间为2秒
-     */
+     * 榛樿瓒呮椂鏃堕棿涓?绉?     */
     private static final long DEFAULT_TIMEOUT = 2000;
     static boolean DEBUG = false;
     static boolean VERBOSE_LOG = false;
     /**
-     * 是否响应跨app的组件调用
-     * 为了方便开发调试，默认设置为允许响应跨app组件调用
-     * 为了安全，app上线时可以将此值设置为false，避免被恶意调用
+     * 鏄惁鍝嶅簲璺╝pp鐨勭粍浠惰皟鐢?     * 涓轰簡鏂逛究寮€鍙戣皟璇曪紝榛樿璁剧疆涓哄厑璁稿搷搴旇法app缁勪欢璋冪敤
+     * 涓轰簡瀹夊叏锛宎pp涓婄嚎鏃跺彲浠ュ皢姝ゅ€艰缃负false锛岄伩鍏嶈鎭舵剰璋冪敤
      */
     static boolean RESPONSE_FOR_REMOTE_CC = false;
     /**
-     * 如果调用到当前app内没有的组件，是否尝试去其它app内调用（默认为false）
-     */
+     * 濡傛灉璋冪敤鍒板綋鍓峚pp鍐呮病鏈夌殑缁勪欢锛屾槸鍚﹀皾璇曞幓鍏跺畠app鍐呰皟鐢紙榛樿涓篺alse锛?     */
     static boolean CALL_REMOTE_CC_IF_NEED = false;
 
     private volatile CCResult result;
@@ -71,22 +68,16 @@ public class CC {
     }
 
     /**
-     * 初始化方法
-     * 仅初始化CC，不初始化组件和拦截器
-     * 在Application.onCreate(...)中调用
-     * @param app Application
+     * 鍒濆鍖栨柟娉?     * 浠呭垵濮嬪寲CC锛屼笉鍒濆鍖栫粍浠跺拰鎷︽埅鍣?     * 鍦ˋpplication.onCreate(...)涓皟鐢?     * @param app Application
      */
     public static synchronized void init(Application app) {
         init(app, false, false);
     }
 
     /**
-     * 初始化方法
-     * 同时初始化组件和全局拦截器
-     * @param app Application
-     * @param initComponents 如果设置为true则同时初始化组件
-     * @param initGlobalInterceptors 如果设置为true则同时初始化全局拦截器
-     */
+     * 鍒濆鍖栨柟娉?     * 鍚屾椂鍒濆鍖栫粍浠跺拰鍏ㄥ眬鎷︽埅鍣?     * @param app Application
+     * @param initComponents 濡傛灉璁剧疆涓簍rue鍒欏悓鏃跺垵濮嬪寲缁勪欢
+     * @param initGlobalInterceptors 濡傛灉璁剧疆涓簍rue鍒欏悓鏃跺垵濮嬪寲鍏ㄥ眬鎷︽埅鍣?     */
     public static synchronized void init(Application app, boolean initComponents, boolean initGlobalInterceptors) {
         if (application == null && app != null) {
             application = app;
@@ -111,27 +102,25 @@ public class CC {
 
     private WeakReference<Context> context;
     /**
-     * 组件名称
+     * 缁勪欢鍚嶇О
      */
     private String componentName;
     /**
-     * 组件中某个功能的名称，用以区别同一个组件中不同功能的调用
-     */
+     * 缁勪欢涓煇涓姛鑳界殑鍚嶇О锛岀敤浠ュ尯鍒悓涓€涓粍浠朵腑涓嶅悓鍔熻兘鐨勮皟鐢?     */
     private String actionName;
     private final Map<String, Object> params = new HashMap<>();
     /**
-     * 回调对象
+     * 鍥炶皟瀵硅薄
      */
     private IComponentCallback callback;
     /**
-     * 是否异步执行
+     * 鏄惁寮傛鎵ц
      */
     private boolean async;
     private final List<ICCInterceptor> interceptors = new ArrayList<>();
     private boolean callbackOnMainThread;
     /**
-     * 调用超时时间，默认值（同步调用：2000， 异步调用：0）
-     */
+     * 璋冪敤瓒呮椂鏃堕棿锛岄粯璁ゅ€硷紙鍚屾璋冪敤锛?000锛?寮傛璋冪敤锛?锛?     */
     private long timeout = -1;
     long timeoutAt;
     private final AtomicBoolean finished = new AtomicBoolean(false);
@@ -145,27 +134,27 @@ public class CC {
     }
 
     /**
-     * 创建CC对象的Builder<br>
-     * <b>此对象会被CC框架复用，请勿在程序中保存</b>
-     * @param componentName 要调用的组件名称
-     * @return 创建CC对象的Builder
+     * 鍒涘缓CC瀵硅薄鐨凚uilder<br>
+     * <b>姝ゅ璞′細琚獵C妗嗘灦澶嶇敤锛岃鍕垮湪绋嬪簭涓繚瀛?/b>
+     * @param componentName 瑕佽皟鐢ㄧ殑缁勪欢鍚嶇О
+     * @return 鍒涘缓CC瀵硅薄鐨凚uilder
      */
     public static Builder obtainBuilder(String componentName) {
         return BUILDER_POOL.get(componentName);
     }
 
     /**
-     * 获取当前app的Application对象
-     * @return application对象
+     * 鑾峰彇褰撳墠app鐨凙pplication瀵硅薄
+     * @return application瀵硅薄
      */
     public static Application getApplication() {
         return application;
     }
 
     /**
-     * CC的Builder,支持链式调用<br>
-     * 最终通过调用{@link Builder#build()}方法获取CC对象
-     * <b>此对象会被CC框架复用，请勿在程序中保存</b>
+     * CC鐨凚uilder,鏀寔閾惧紡璋冪敤<br>
+     * 鏈€缁堥€氳繃璋冪敤{@link Builder#build()}鏂规硶鑾峰彇CC瀵硅薄
+     * <b>姝ゅ璞′細琚獵C妗嗘灦澶嶇敤锛岃鍕垮湪绋嬪簭涓繚瀛?/b>
      */
     public static class Builder implements ObjPool.Resetable, ObjPool.Initable<String> {
         private CC cr;
@@ -173,11 +162,11 @@ public class CC {
         private Builder() { }
 
         /**
-         * 设置context
-         * @param context 设置为null时无效<br>
-         *                调用同一个app的组件时，组件实现方通过cc.getContext()将返回此值<br>
-         *                调用其它app的组件时，组件实现方通过cc.getContext()将返回组件所在app的Application对象
-         * @return Builder自身
+         * 璁剧疆context
+         * @param context 璁剧疆涓簄ull鏃舵棤鏁?br>
+         *                璋冪敤鍚屼竴涓猘pp鐨勭粍浠舵椂锛岀粍浠跺疄鐜版柟閫氳繃cc.getContext()灏嗚繑鍥炴鍊?br>
+         *                璋冪敤鍏跺畠app鐨勭粍浠舵椂锛岀粍浠跺疄鐜版柟閫氳繃cc.getContext()灏嗚繑鍥炵粍浠舵墍鍦╝pp鐨凙pplication瀵硅薄
+         * @return Builder鑷韩
          */
         public Builder setContext(Context context) {
             if (context != null) {
@@ -187,17 +176,16 @@ public class CC {
         }
 
         /**
-         * 不限制超时时间
-         * @return Builder自身
+         * 涓嶉檺鍒惰秴鏃舵椂闂?         * @return Builder鑷韩
          */
         public Builder setNoTimeout() {
             return setTimeout(0);
         }
 
         /**
-         * 设置超时时间
-         * @param timeout 超时时间限制(ms)
-         * @return Builder自身
+         * 璁剧疆瓒呮椂鏃堕棿
+         * @param timeout 瓒呮椂鏃堕棿闄愬埗(ms)
+         * @return Builder鑷韩
          */
         public Builder setTimeout(long timeout) {
             if (timeout >= 0) {
@@ -211,9 +199,8 @@ public class CC {
         }
 
         /**
-         * 用于调取同一个组件的不同action（可以理解为分组的概念：将不同的action分组在一个组件里对外提供服务）
-         * @param actionName action的名称，组件在执行时可根据此值执行不同的动作，返回不同的信息
-         * @return Builder自身
+         * 鐢ㄤ簬璋冨彇鍚屼竴涓粍浠剁殑涓嶅悓action锛堝彲浠ョ悊瑙ｄ负鍒嗙粍鐨勬蹇碉細灏嗕笉鍚岀殑action鍒嗙粍鍦ㄤ竴涓粍浠堕噷瀵瑰鎻愪緵鏈嶅姟锛?         * @param actionName action鐨勫悕绉帮紝缁勪欢鍦ㄦ墽琛屾椂鍙牴鎹鍊兼墽琛屼笉鍚岀殑鍔ㄤ綔锛岃繑鍥炰笉鍚岀殑淇℃伅
+         * @return Builder鑷韩
          */
         public Builder setActionName(String actionName) {
             cr.actionName = actionName;
@@ -226,9 +213,8 @@ public class CC {
         }
 
         /**
-         * 设置组件调用的参数（将清空之前设置的参数列表）
-         * @param params 参数 {@link Map} 类型
-         * @return Builder自身
+         * 璁剧疆缁勪欢璋冪敤鐨勫弬鏁帮紙灏嗘竻绌轰箣鍓嶈缃殑鍙傛暟鍒楄〃锛?         * @param params 鍙傛暟 {@link Map} 绫诲瀷
+         * @return Builder鑷韩
          */
         public Builder setParams(Map<String, Object> params) {
             cr.params.clear();
@@ -236,9 +222,8 @@ public class CC {
         }
 
         /**
-         * 向组件调用的参数列表中添加参数
-         * @param params 参数 {@link Map} 类型
-         * @return Builder自身
+         * 鍚戠粍浠惰皟鐢ㄧ殑鍙傛暟鍒楄〃涓坊鍔犲弬鏁?         * @param params 鍙傛暟 {@link Map} 绫诲瀷
+         * @return Builder鑷韩
          */
         public Builder addParams(Map<String, Object> params) {
             if (params != null) {
@@ -250,19 +235,17 @@ public class CC {
         }
 
         /**
-         * 添加调用参数
-         * @param key 参数的key
-         * @param value 参数的value
-         * @return Builder自身
+         * 娣诲姞璋冪敤鍙傛暟
+         * @param key 鍙傛暟鐨刱ey
+         * @param value 鍙傛暟鐨剉alue
+         * @return Builder鑷韩
          */
         public Builder addParam(String key, Object value) {
             cr.params.put(key, value);
             return this;
         }
         /**
-         * 添加组件调用前的拦截器
-         * @param interceptor 拦截器
-         * @return Builder自身
+         * 娣诲姞缁勪欢璋冪敤鍓嶇殑鎷︽埅鍣?         * @param interceptor 鎷︽埅鍣?         * @return Builder鑷韩
          */
         public Builder addInterceptor(ICCInterceptor interceptor) {
             if (interceptor != null) {
@@ -271,9 +254,9 @@ public class CC {
             return this;
         }
         /**
-         * 设置activity.onDestroy时自动cancel
-         * @param activity 监控此activity的生命周期，在onDestroy方法被调用后若cc未执行完则自动cancel
-         * @return Builder自身
+         * 璁剧疆activity.onDestroy鏃惰嚜鍔╟ancel
+         * @param activity 鐩戞帶姝ctivity鐨勭敓鍛藉懆鏈燂紝鍦╫nDestroy鏂规硶琚皟鐢ㄥ悗鑻c鏈墽琛屽畬鍒欒嚜鍔╟ancel
+         * @return Builder鑷韩
          */
         public Builder cancelOnDestroyWith(Activity activity) {
             if (activity != null) {
@@ -283,9 +266,9 @@ public class CC {
         }
 
         /**
-         * 设置fragment.onDestroy时自动cancel
-         * @param fragment 监控此fragment的生命周期，在onDestroy方法被调用后若cc未执行完则自动cancel
-         * @return Builder自身
+         * 璁剧疆fragment.onDestroy鏃惰嚜鍔╟ancel
+         * @param fragment 鐩戞帶姝ragment鐨勭敓鍛藉懆鏈燂紝鍦╫nDestroy鏂规硶琚皟鐢ㄥ悗鑻c鏈墽琛屽畬鍒欒嚜鍔╟ancel
+         * @return Builder鑷韩
          */
         public Builder cancelOnDestroyWith(Fragment fragment) {
             if (fragment != null) {
@@ -297,12 +280,12 @@ public class CC {
 
 
         /**
-         * 构建CC对象
-         * @return CC对象
+         * 鏋勫缓CC瀵硅薄
+         * @return CC瀵硅薄
          */
         public CC build() {
             CC cr = this.cr;
-            //回收复用builder
+            //鍥炴敹澶嶇敤builder
             BUILDER_POOL.put(this);
             if (TextUtils.isEmpty(cr.componentName)) {
                 logError("ComponentName is empty:" + cr.toString());
@@ -311,7 +294,7 @@ public class CC {
         }
 
         /**
-         * 用于Builder对象池对此对象的重置
+         * 鐢ㄤ簬Builder瀵硅薄姹犲姝ゅ璞＄殑閲嶇疆
          */
         @Override
         public void reset() {
@@ -319,8 +302,7 @@ public class CC {
         }
 
         /**
-         * 用于Builder对象池对此对象的初始化
-         * @param componentName 组件名称
+         * 鐢ㄤ簬Builder瀵硅薄姹犲姝ゅ璞＄殑鍒濆鍖?         * @param componentName 缁勪欢鍚嶇О
          */
         @Override
         public void init(String componentName) {
@@ -426,9 +408,8 @@ public class CC {
     }
 
     /**
-     * 判断是否需要中止运行，本次调用被手动取消或已超时。
-     * 组件在处理耗时操作时，要根据此状态进行判断，以免进行无效操作
-     * @return <code>true</code>:需要中止继续执行；false:可以继续运行
+     * 鍒ゆ柇鏄惁闇€瑕佷腑姝㈣繍琛岋紝鏈璋冪敤琚墜鍔ㄥ彇娑堟垨宸茶秴鏃躲€?     * 缁勪欢鍦ㄥ鐞嗚€楁椂鎿嶄綔鏃讹紝瑕佹牴鎹鐘舵€佽繘琛屽垽鏂紝浠ュ厤杩涜鏃犳晥鎿嶄綔
+     * @return <code>true</code>:闇€瑕佷腑姝㈢户缁墽琛岋紱false:鍙互缁х画杩愯
      */
     public boolean isStopped() {
         return canceled || timeoutStatus;
@@ -470,7 +451,7 @@ public class CC {
     }
 
     void wait4Result() {
-        //等待调用CC.sendCCResult(callId, result)
+        //绛夊緟璋冪敤CC.sendCCResult(callId, result)
         synchronized (wait4resultLock) {
             if (!isFinished()) {
                 try {
@@ -489,7 +470,7 @@ public class CC {
     }
 
     /**
-     * 在onDestroy后，自动cancel
+     * 鍦╫nDestroy鍚庯紝鑷姩cancel
      */
     void cancelOnDestroy(Object reason) {
         if (!isFinished()) {
@@ -525,25 +506,22 @@ public class CC {
     }
 
     /**
-     * 异步调用，且不需要回调
-     * @return callId，可用于取消调用的任务
-     */
+     * 寮傛璋冪敤锛屼笖涓嶉渶瑕佸洖璋?     * @return callId锛屽彲鐢ㄤ簬鍙栨秷璋冪敤鐨勪换鍔?     */
     public String callAsync() {
         return callAsync(null);
     }
     /**
-     * 异步调用,在异步线程执行回调
-     * @param callback 回调函数
-     * @return callId 用于取消
+     * 寮傛璋冪敤,鍦ㄥ紓姝ョ嚎绋嬫墽琛屽洖璋?     * @param callback 鍥炶皟鍑芥暟
+     * @return callId 鐢ㄤ簬鍙栨秷
      */
     public String callAsync(IComponentCallback callback) {
         this.callbackOnMainThread = false;
         return processCallAsync(callback);
     }
     /**
-     * 异步调用,在主线程执行回调
-     * @param callback 回调函数
-     * @return callId 用于取消
+     * 寮傛璋冪敤,鍦ㄤ富绾跨▼鎵ц鍥炶皟
+     * @param callback 鍥炶皟鍑芥暟
+     * @return callId 鐢ㄤ簬鍙栨秷
      */
     public String callAsyncCallbackOnMainThread(IComponentCallback callback) {
         this.callbackOnMainThread = true;
@@ -555,7 +533,7 @@ public class CC {
             this.callback = callback;
         }
         this.async = true;
-        //调用方未设置超时时间，默认为无超时时间
+        // An unspecified asynchronous timeout means no timeout.
         if (timeout < 0) {
             timeout = 0;
         }
@@ -571,14 +549,14 @@ public class CC {
     }
 
     /**
-     * 同步调用
+     * 鍚屾璋冪敤
      * @return CCResult
      */
     public CCResult call() {
         this.callback = null;
         this.async = false;
         boolean mainThreadCallWithNoTimeout = timeout == 0 && Looper.getMainLooper() == Looper.myLooper();
-        //主线程下的同步调用必须设置超时时间，默认为2秒
+        // Synchronous calls on the main thread require a timeout.
         if (mainThreadCallWithNoTimeout || timeout < 0) {
             timeout = DEFAULT_TIMEOUT;
         }
@@ -586,7 +564,7 @@ public class CC {
         this.callId = nextCallId();
         this.canceled = false;
         this.timeoutStatus = false;
-        //加上开关判断，防止开关关闭的情况下也执行this.toString()方法
+        //鍔犱笂寮€鍏冲垽鏂紝闃叉寮€鍏冲叧闂殑鎯呭喌涓嬩篃鎵цthis.toString()鏂规硶
         if (VERBOSE_LOG) {
             verboseLog(callId, "start to call:" + this);
         }
@@ -594,7 +572,7 @@ public class CC {
     }
 
     /**
-     * 设定超时
+     * 璁惧畾瓒呮椂
      */
     private void setTimeoutAt() {
         if (timeout > 0) {
@@ -605,7 +583,7 @@ public class CC {
     }
 
     /**
-     * 取消本组件的调用
+     * 鍙栨秷鏈粍浠剁殑璋冪敤
      */
     public void cancel() {
         if (markFinished()) {
@@ -643,11 +621,8 @@ public class CC {
     }
 
     /**
-     * 在任意位置回调结果
-     * 组件的onCall方法被调用后，<b>必须确保所有分支均会调用</b>到此方法将组件调用结果回调给调用方
-     * @param callId 回调对象的调用id
-     * @param ccResult 回调的结果
-     */
+     * 鍦ㄤ换鎰忎綅缃洖璋冪粨鏋?     * 缁勪欢鐨刼nCall鏂规硶琚皟鐢ㄥ悗锛?b>蹇呴』纭繚鎵€鏈夊垎鏀潎浼氳皟鐢?/b>鍒版鏂规硶灏嗙粍浠惰皟鐢ㄧ粨鏋滃洖璋冪粰璋冪敤鏂?     * @param callId 鍥炶皟瀵硅薄鐨勮皟鐢╥d
+     * @param ccResult 鍥炶皟鐨勭粨鏋?     */
     public static void sendCCResult(String callId, CCResult ccResult) {
         if (VERBOSE_LOG) {
             verboseLog(callId, "CCResult received by CC.sendCCResult(...).CCResult:" + ccResult);
@@ -671,10 +646,8 @@ public class CC {
     }
 
     /**
-     * 在任意位置回调结果
-     * @param callId 回调对象的调用id
-     * @param result 回调的结果
-     * @deprecated use {@link #sendCCResult(String, CCResult)}
+     * 鍦ㄤ换鎰忎綅缃洖璋冪粨鏋?     * @param callId 鍥炶皟瀵硅薄鐨勮皟鐢╥d
+     * @param result 鍥炶皟鐨勭粨鏋?     * @deprecated use {@link #sendCCResult(String, CCResult)}
      */
     @Deprecated
     public static void invokeCallback(String callId, CCResult result) {
@@ -682,44 +655,40 @@ public class CC {
     }
 
     /**
-     * 获取当前app内是否含有指定的组件
-     * @param componentName 组件名称
-     * @return true:有， false:没有
+     * 鑾峰彇褰撳墠app鍐呮槸鍚﹀惈鏈夋寚瀹氱殑缁勪欢
+     * @param componentName 缁勪欢鍚嶇О
+     * @return true:鏈夛紝 false:娌℃湁
      */
     public static boolean hasComponent(String componentName) {
         return ComponentManager.hasComponent(componentName);
     }
 
     /**
-     * 动态注册组件(类似于动态注册广播接收器BroadcastReceiver)
-     * @param component 组件对象
+     * 鍔ㄦ€佹敞鍐岀粍浠?绫讳技浜庡姩鎬佹敞鍐屽箍鎾帴鏀跺櫒BroadcastReceiver)
+     * @param component 缁勪欢瀵硅薄
      */
     public static void registerComponent(IDynamicComponent component) {
         ComponentManager.registerComponent(component);
     }
 
     /**
-     * 动态反注册组件(类似于反注册广播接收器BroadcastReceiver)
-     * @param component 组件对象
+     * 鍔ㄦ€佸弽娉ㄥ唽缁勪欢(绫讳技浜庡弽娉ㄥ唽骞挎挱鎺ユ敹鍣˙roadcastReceiver)
+     * @param component 缁勪欢瀵硅薄
      */
     public static void unregisterComponent(IDynamicComponent component) {
         ComponentManager.unregisterComponent(component);
     }
 
     /**
-     * 注册一个全局拦截器
-     * 每个拦截器类型只能注册一次
-     * {@link IGlobalCCInterceptor}接口的直接实现类默认会自动注册，无需手动添加
-     * 若不需要自动注册，可使用子接口的方式来定义
-     * @param interceptor 全局拦截器
-     */
+     * 娉ㄥ唽涓€涓叏灞€鎷︽埅鍣?     * 姣忎釜鎷︽埅鍣ㄧ被鍨嬪彧鑳芥敞鍐屼竴娆?     * {@link IGlobalCCInterceptor}鎺ュ彛鐨勭洿鎺ュ疄鐜扮被榛樿浼氳嚜鍔ㄦ敞鍐岋紝鏃犻渶鎵嬪姩娣诲姞
+     * 鑻ヤ笉闇€瑕佽嚜鍔ㄦ敞鍐岋紝鍙娇鐢ㄥ瓙鎺ュ彛鐨勬柟寮忔潵瀹氫箟
+     * @param interceptor 鍏ㄥ眬鎷︽埅鍣?     */
     public static void registerGlobalInterceptor(IGlobalCCInterceptor interceptor) {
         GlobalCCInterceptorManager.registerGlobalInterceptor(interceptor);
     }
 
     /**
-     * 注销一个全局拦截器
-     * @param clazz 拦截器的类型
+     * 娉ㄩ攢涓€涓叏灞€鎷︽埅鍣?     * @param clazz 鎷︽埅鍣ㄧ殑绫诲瀷
      */
     public static void unregisterGlobalInterceptor(Class<? extends IGlobalCCInterceptor> clazz) {
         GlobalCCInterceptorManager.unregisterGlobalInterceptor(clazz);
@@ -772,33 +741,29 @@ public class CC {
     }
 
     /**
-     * 开关组件调用过程详细日志，默认为关闭状态
-     * @param enable 开关（true：显示详细日志， false：关闭。）
+     * 寮€鍏崇粍浠惰皟鐢ㄨ繃绋嬭缁嗘棩蹇楋紝榛樿涓哄叧闂姸鎬?     * @param enable 寮€鍏筹紙true锛氭樉绀鸿缁嗘棩蹇楋紝 false锛氬叧闂€傦級
      */
     public static void enableVerboseLog(boolean enable) {
         VERBOSE_LOG = enable;
     }
 
     /**
-     * 开关debug模式（打印日志），默认为关闭状态
-     * @param enable 开关（true：打开debug模式， false：关闭。默认为false）
-     */
+     * 寮€鍏砫ebug妯″紡锛堟墦鍗版棩蹇楋級锛岄粯璁や负鍏抽棴鐘舵€?     * @param enable 寮€鍏筹紙true锛氭墦寮€debug妯″紡锛?false锛氬叧闂€傞粯璁や负false锛?     */
     public static void enableDebug(boolean enable) {
         DEBUG = enable;
     }
     /**
-     * 开关跨app调用组件支持，默认为打开状态
-     *  1. 某个componentName当前app中不存在时，是否尝试调用其它app的此组件
-     *  2. 接收到跨app调用时，是否执行本次调用
-     *  3. 建议仅在开发阶段调试时打开，正式发布时关闭
-     * @param enable 开关（true：会执行，默认值为true； false：不会）
+     * 寮€鍏宠法app璋冪敤缁勪欢鏀寔锛岄粯璁や负鎵撳紑鐘舵€?     *  1. 鏌愪釜componentName褰撳墠app涓笉瀛樺湪鏃讹紝鏄惁灏濊瘯璋冪敤鍏跺畠app鐨勬缁勪欢
+     *  2. 鎺ユ敹鍒拌法app璋冪敤鏃讹紝鏄惁鎵ц鏈璋冪敤
+     *  3. 寤鸿浠呭湪寮€鍙戦樁娈佃皟璇曟椂鎵撳紑锛屾寮忓彂甯冩椂鍏抽棴
+     * @param enable 寮€鍏筹紙true锛氫細鎵ц锛岄粯璁ゅ€间负true锛?false锛氫笉浼氾級
      */
     public static void enableRemoteCC(boolean enable) {
         RESPONSE_FOR_REMOTE_CC = enable;
         CALL_REMOTE_CC_IF_NEED = enable;
         if (enable && application != null && isMainProcess()) {
-            // 启动":cc"进程
-            // 解决'组件以app运行时在部分设备上由于应用没有自启动权限而无法被其它app调用'的问题
+            // 鍚姩":cc"杩涚▼
+            // Wake the component process for remote calls.
             Intent intent = new Intent(application.getPackageName()
                     + ".cc.action.REMOTE_CC.awake");
             application.sendBroadcast(intent);
@@ -806,9 +771,10 @@ public class CC {
     }
 
     /**
-     * 当前进程是否以包名在运行（当前进程是否为主进程）
+     * 褰撳墠杩涚▼鏄惁浠ュ寘鍚嶅湪杩愯锛堝綋鍓嶈繘绋嬫槸鍚︿负涓昏繘绋嬶級
      */
     public static boolean isMainProcess(){
         return CCUtil.isMainProcess();
     }
 }
+

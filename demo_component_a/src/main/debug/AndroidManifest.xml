@@ -1,5 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.billy.cc.demo.component.a" >
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <application
         android:name="debug.MyApp"
@@ -8,7 +8,7 @@
         android:label="@string/demo_a_app_name"
         android:supportsRtl="true"
         android:theme="@style/demo_a_AppTheme">
-        <activity android:name="com.billy.cc.demo.component.a.ActivityA">
+        <activity android:name="com.billy.cc.demo.component.a.ActivityA" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -17,3 +17,4 @@
         </activity>
     </application>
 </manifest>
+
